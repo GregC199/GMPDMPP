@@ -7,7 +7,8 @@ class graf:
 	wierzcholekBList=[]
 	wspolrzednaXList=[]
 	wspolrzednaYList=[]
-	typPrzeszkodyList=[]
+	wierzcholkiPrzeszkodaList=[]
+	przeszkodaTypList=[]
 	
 	#funkcja inicjujaca graf, w argumencie przyjmuje nazwe pliku wygenerowanego przez modul napisany w jezyku C++	
 	def inicjuj(self,nazwa):
@@ -19,22 +20,25 @@ class graf:
 		#Podział zmiennej str (separatorem sa znaki biale)
 		podz=str.split()
 		
-		self.liczbaWierzcholkow=podz[0]
-		self.liczbaKrawedzi=podz[1]
-		self.wierzcholekPoczatkowy=podz[2]
+		self.liczbaWierzcholkow=int(podz[0])
+		self.liczbaKrawedzi=int(podz[1])
+		self.wierzcholekPoczatkowy=int(podz[2])
 
-		for i in range(3,len(podz)):
-			if(i%5==3):
+		for i in range(3,self.liczbaKrawedzi*4+3):
+			if(i%4==3):
 				self.wierzcholekAList.append(int(podz[i]))
-			elif(i%5==4):
+			elif(i%4==0):
 				self.wierzcholekBList.append(int(podz[i]))
-			elif(i%5==0):
+			elif(i%4==1):
 				self.wspolrzednaXList.append(int(podz[i]))
-			elif(i%5==1):
+			elif(i%4==2):
 				self.wspolrzednaYList.append(int(podz[i]))
-			else:
-				self.typPrzeszkodyList.append(podz[i])
-	
+		for i in range(self.liczbaKrawedzi*4+3,len(podz)):
+			if(i%2==1):
+				self.wierzcholkiPrzeszkodaList.append(int(podz[i]))
+			if(i%2==0):
+				self.przeszkodaTypList.append(podz[i])
+		
 	#Funkcja sluzaca do diagnostyki
 	def wyswietl(self):
 		f=open(self.nazwaPliku, 'r+')
@@ -46,8 +50,9 @@ class graf:
 		print(":::",self.wierzcholekBList)
 		print(":::",self.wspolrzednaXList)
 		print(":::",self.wspolrzednaYList)
-		print(":::",self.typPrzeszkodyList)
-
+		print(":::",self.wierzcholkiPrzeszkodaList)
+		print(":::",self.przeszkodaTypList)
+		
 
 #Tworzenie pustego obiektu klasy graf
 obiekt=graf()
