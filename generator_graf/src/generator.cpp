@@ -82,5 +82,16 @@ void generator_graf::generator_z_zapisem(int wierzcholki, int il_krawedz, fstrea
 
 }
 
+void generator_graf::zapis_do_pliku(string& nazwa){
+
+	fstream str;
+
+    str.open(nazwa, ios_base::app);           ///otwieramy strumien danych zapisu do pliku
+
+    this->generator_z_zapisem(this->ile_wierzch, this->ile_kraw, str); //wywolujemy metode zapisu do zadanego strumienia
+
+    str.close();           ///zamykamy strumien do pliku
+}
+
 
 
