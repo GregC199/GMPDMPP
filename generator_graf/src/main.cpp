@@ -1,11 +1,8 @@
 
 #include "libs.h"
 #include "generator.h"
-#include <string>
-int silnia (int liczba){
-	int wynik = 1;
-
-	for(int i = 1; i<=liczba; ++i)wynik*=i;
+int max_ilosc_wierzcholkow (int liczba){
+	int wynik = (liczba*(liczba - 1))/2;
 
 	return wynik;
 }
@@ -74,7 +71,7 @@ void menu(){
 			{ // wpisano liczbê
 				warunek_krawedzi = true;
 			}
-			if(ilosc_krawedzi > silnia(ilosc_wierzch))warunek_krawedzi = false;
+			if(ilosc_krawedzi > max_ilosc_wierzcholkow(ilosc_wierzch))warunek_krawedzi = false;
 			if(ilosc_krawedzi < ilosc_wierzch)warunek_krawedzi = false;
 		}
 
