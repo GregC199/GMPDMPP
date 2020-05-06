@@ -19,18 +19,22 @@ void generator_graf::generator_z_zapisem(int wierzcholki, int il_krawedz, fstrea
     przeszkoda[1] = 'o';
 
     int ilosc_przeszkod = (int)ceil((double)wierzcholki/20.0);
-    int memory[ilosc_przeszkod];
+    int memory[ilosc_przeszkod+1];
 
     bool war = false;
     bool war2 = false;
 
-    for(int i = 0; i<ilosc_przeszkod;++i)//inicjalizacj wartoœci dla tablicy memory
+    for(int i = 0; i<ilosc_przeszkod+1;++i)//inicjalizacj wartoœci dla tablicy memory
     {
     	memory[i] = -1;
     }
 
-    strumien << wierzcholki<<" "<<il_krawedz<<" "<<rand()%wierzcholki<<endl;
-                                                        ///wypisujemy ilosc wierzcholkow, krawedzi i wierzcholek startowy
+    tmp=rand()%wierzcholki;
+    memory[0] = tmp;
+
+    strumien << wierzcholki<<" "<<il_krawedz<<" "<<tmp<<endl;
+
+    tmp = 0;													///wypisujemy ilosc wierzcholkow, krawedzi i wierzcholek startowy
                                                         ///wierzcholek startowy oraz wagi krawedzi sa pseudolosowe
     for(int i = 0; i < wierzcholki - 1 && i < il_krawedz -1 ; ++i)
                                                         ///wypisujemy glowny cykl laczacy wszystkie wierzcholki po kolei
@@ -54,14 +58,20 @@ void generator_graf::generator_z_zapisem(int wierzcholki, int il_krawedz, fstrea
 
     tmp = rand()%wierzcholki;
 
+    while(tmp == memory[0]){
+
+    	tmp = rand()%wierzcholki;
+    }
+
+
     strumien << tmp << " "<<przeszkoda[rand()%2]<<endl;
 
     if(ilosc_przeszkod > 1){
 
-    	memory[0] = tmp;
+    	memory[1] = tmp;
     	tmp = 0;
 
-        for(int i = 1; i < ilosc_przeszkod; ++i){
+        for(int i = 2; i < ilosc_przeszkod+1; ++i){
         	while(war == false){
         		war2 = false;
         		tmp = rand()%wierzcholki;
