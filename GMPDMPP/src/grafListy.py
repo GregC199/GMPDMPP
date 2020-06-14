@@ -1,3 +1,9 @@
+import numpy as np
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+from scipy import stats
+
 class graf:
 	liczbaWierzcholkow=0
 	liczbaPolaczen=0
@@ -10,7 +16,7 @@ class graf:
 	wierzcholkiPrzeszkodaList=[]
 	przeszkodaTypList=[]
 	
-	#funkcja inicjujaca graf, w argumencie przyjmuje nazwe pliku wygenerowanego przez modul napisany w jezyku C++	
+	#funkcja inicjujaca grafTest, w argumencie przyjmuje nazwe pliku wygenerowanego przez modul napisany w jezyku C++	
 	def inicjuj(self,nazwa):
 		#Otwieranie pliku i kopiowanie zawartosci do zmiennej str
 		self.nazwaPliku=nazwa
@@ -54,9 +60,9 @@ class graf:
 		print(":::",self.przeszkodaTypList)
 		
 
-#Tworzenie pustego obiektu klasy graf
+#Tworzenie pustego obiektu klasy grafTest
 obiekt=graf()
-#Inicjowanie obiektu klasy graf na podstawie pliku tekstowego wygenerowanego przez generator grafow napisany w jezyku C++
+#Inicjowanie obiektu klasy grafTest na podstawie pliku tekstowego wygenerowanego przez generator grafow napisany w jezyku C++
 obiekt.inicjuj('test.dat')
 #wyswietlanie na potrzeby diagnostyki
 obiekt.wyswietl()
