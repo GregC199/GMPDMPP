@@ -10,23 +10,65 @@ wierzcholekAList=[]
 wierzcholekBList=[]
 wspolrzednaXList=[40, 9, 81, 83, 100, 22, 32, 16, 43, 65]
 wspolrzednaYList=[99, 70, 59, 87, 100, 54, 78, 24, 32, 44]
-wierzcholkiPrzeszkodaList=[4,6,9]
-przeszkodaTypList=['o','o','o']
-promienList=[10,8,17]
+wierzcholkiPrzeszkodaList=[4,6,9,1,3,7]
+przeszkodaTypList=['o','o','o','k','k','k']
+promienList=[0,0,0,0,10,0,8,0,0,17]
+bokA=[0,16,0,16,0,0,0,10,0,0]
+bokB=[0,12,0,10,0,0,0,42,0,0]
+#wierzcholkiPrzeszkodaList=[5]
+#przeszkodaTypList=['o']
+#promienList=[0,0,0,0,10,20,8,0,0,17]
+#bokA=[0,8,0,8,0,20,0,5,0,0]
+#bokB=[0,6,0,5,0,20,0,21,0,0]
+
 
 arrPunktowX=[]
 arrPunktowY=[]
 
-rozdzielczosc=1
+rozdzielczoscKol=4
+rozdzielczoscProstokatow=12;
+
+def rysujProstokat(A,B):
+    #narysuj rogi
+    arrPunktowX.append(wspolrzednaXList[i]+A/2)
+    arrPunktowY.append(wspolrzednaYList[i]+B/2)
+    arrPunktowX.append(wspolrzednaXList[i]-A/2)
+    arrPunktowY.append(wspolrzednaYList[i]+B/2)
+    arrPunktowX.append(wspolrzednaXList[i]-A/2)
+    arrPunktowY.append(wspolrzednaYList[i]-B/2)
+    arrPunktowX.append(wspolrzednaXList[i]+A/2)
+    arrPunktowY.append(wspolrzednaYList[i]-B/2)
+    odlegloscA=A
+    odlegloscB=B
+    iteracjaA=1
+    iteracjaB=1
+    while odlegloscA>rozdzielczoscProstokatow:
+        mianownik=pow(2,(iteracjaA))
+        for x in range(0,pow(2,(iteracjaA)-1)):
+            arrPunktowX.append(wspolrzednaXList[i]-A/2+(x*2+1)*A/mianownik)
+            arrPunktowY.append(wspolrzednaYList[i]+B/2)
+            arrPunktowX.append(wspolrzednaXList[i]-A/2+(x*2+1)*A/mianownik)
+            arrPunktowY.append(wspolrzednaYList[i]-B/2)
+        iteracjaA=iteracjaA+1
+        odlegloscA=odlegloscA/2
+    while odlegloscB>rozdzielczoscProstokatow:
+        mianownik=pow(2,(iteracjaB))
+        for x in range(0,pow(2,(iteracjaB)-1)):
+            arrPunktowX.append(wspolrzednaXList[i]+A/2)
+            arrPunktowY.append(wspolrzednaYList[i]-B/2+(x*2+1)*B/mianownik)
+            arrPunktowX.append(wspolrzednaXList[i]-A/2)
+            arrPunktowY.append(wspolrzednaYList[i]-B/2+(x*2+1)*B/mianownik)    
+        iteracjaB=iteracjaB+1
+        odlegloscB=odlegloscB/2
 
 def rysujOkrag(promien):
     kat=0
     krok=90
     odleglosc=999
-    while odleglosc>rozdzielczosc:
+    while odleglosc>rozdzielczoscKol:
         while kat<360:
-            arrPunktowX.append(promien*math.cos(kat)+wspolrzednaXList[i])
-            arrPunktowY.append(promien*math.sin(kat)+wspolrzednaYList[i])
+            arrPunktowX.append(promien*math.cos(kat*math.pi/180)+wspolrzednaXList[i])
+            arrPunktowY.append(promien*math.sin(kat*math.pi/180)+wspolrzednaYList[i])
             kat=kat+krok
         krok=krok/2
         kat=krok
@@ -35,11 +77,10 @@ def rysujOkrag(promien):
 for x in range(0, len(wierzcholkiPrzeszkodaList)):
     typ=przeszkodaTypList[x]
     i=wierzcholkiPrzeszkodaList[x]
-    okragTyp='o'
-    prostokatTyp='k'
+
     if typ=='o':#przeszkoda jest okregiem 
-        promien=promienList[x]
-        print("wierzcholek", x, ", X:",wspolrzednaXList[i],", Y:",wspolrzednaYList[i])
+        promien=promienList[i]
+        print("wierzcholek", x, ", X:",wspolrzednaXList[i],", Y:",wspolrzednaYList[i], ", r: ", promien)
         arrPunktowX.append(wspolrzednaXList[i])#srodek X
         arrPunktowY.append(wspolrzednaYList[i])#srodek Y
         #W tej funkcji dodawane sa punkty na okregu
@@ -47,20 +88,32 @@ for x in range(0, len(wierzcholkiPrzeszkodaList)):
         odlegloscWSrodku=promien
         #W tym while dodawane sa punkty wewnatrz okregu (czyli punkty na okregu o mniejszym promieniu)
         iteracjaSrodka=1
-        while odlegloscWSrodku>rozdzielczosc:
-                promienSrodek=promien/(2*iteracjaSrodka)
-                licznikPromienia=1
+        while odlegloscWSrodku>rozdzielczoscKol:
                 for x in range (0,pow(2,(iteracjaSrodka-1))):
-                    kat=0
-                    krok=90
-                    rysujOkrag(licznikPromienia/(promienSrodek))
-                    licznikPromienia=licznikPromienia+2
-                odlegloscWSrodku=odlegloscWSrodku/2
+                    rysujOkrag(promien*(2*x+1)/(pow(2,iteracjaSrodka)))
+                odlegloscWSrodku=odlegloscWSrodku/math.pi
                 iteracjaSrodka=iteracjaSrodka+1
         #jesli wieksza niz rozdzielczosc to dodaj pomiedzy srodkiem a punktami na luku
         #po wyjsciu z while (dobra rozdzielczosc w srodku) przeszkoda jest gotowa
     else:#przeszkoda jest kwadratem
-        print("o")
+        A=bokA[i]
+        B=bokB[i]
+        print("wierzcholek", x, ", X:",wspolrzednaXList[i],", Y:",wspolrzednaYList[i])
+        arrPunktowX.append(wspolrzednaXList[i])#srodek X
+        arrPunktowY.append(wspolrzednaYList[i])#srodek Y
+        rysujProstokat(A,B)
+        if(A>B):
+            odlegloscMiedzyWewnetrznymi=A
+        else:
+            odlegloscMiedzyWewnetrznymi=B
+        iteracjaWewnetrznychProstokatow=1
+        while odlegloscMiedzyWewnetrznymi>rozdzielczoscProstokatow:
+            #rysuj prostokąty w forze
+            for x in range(0,pow(2,(iteracjaWewnetrznychProstokatow)-1)):
+                rysujProstokat(A*(2*x+1)/pow(2,(iteracjaWewnetrznychProstokatow)),B*(x*2+1)/pow(2,(iteracjaWewnetrznychProstokatow)))
+            iteracjaWewnetrznychProstokatow=iteracjaWewnetrznychProstokatow+1
+            odlegloscMiedzyWewnetrznymi=odlegloscMiedzyWewnetrznymi/2.82
+
 
 df = pd.DataFrame()
 
