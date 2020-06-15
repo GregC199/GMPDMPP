@@ -26,7 +26,25 @@ arrPunktowX=[]
 arrPunktowY=[]
 
 rozdzielczoscKol=4
-rozdzielczoscProstokatow=12;
+rozdzielczoscProstokatow=6;
+
+def rysujLiniePozioma(A,xStart,y):
+    xStop=xStart+A
+    arrPunktowX.append(xStart)
+    arrPunktowY.append(y)
+    arrPunktowX.append(xStop)
+    arrPunktowY.append(y)
+    odlegloscA=A
+    iteracjaA=1
+    while odlegloscA>rozdzielczoscProstokatow:
+        mianownik=pow(2,(iteracjaA))
+        for x in range(0,pow(2,(iteracjaA)-1)):
+            arrPunktowX.append(xStart+(x*2+1)*A/mianownik)
+            arrPunktowY.append(y)
+
+        iteracjaA=iteracjaA+1
+        odlegloscA=odlegloscA/2
+
 
 def rysujProstokat(A,B):
     #narysuj rogi
@@ -60,6 +78,25 @@ def rysujProstokat(A,B):
             arrPunktowY.append(wspolrzednaYList[i]-B/2+(x*2+1)*B/mianownik)    
         iteracjaB=iteracjaB+1
         odlegloscB=odlegloscB/2
+
+def rysujProstokatv2(A,B):
+    rysujProstokat(A,B)
+
+    #rysuj linie pionowa, ale zamiast robic dodawanie do tablicy punktow to rysowanie linii poziomej
+    xStart=wspolrzednaXList[i]-A/2
+    
+    yStart=wspolrzednaYList[i]-B/2
+    yStop=yStart+B
+    odlegloscB=B
+    iteracjaB=1
+    while odlegloscB>rozdzielczoscProstokatow:
+        mianownik=pow(2,(iteracjaB))
+        for y in range(0,pow(2,(iteracjaB)-1)):
+            rysujLiniePozioma(A,xStart,yStart+(y*2+1)*B/mianownik)
+        iteracjaB=iteracjaB+1
+        odlegloscB=odlegloscB/2
+
+
 
 def rysujOkrag(promien):
     kat=0
@@ -101,7 +138,8 @@ for x in range(0, len(wierzcholkiPrzeszkodaList)):
         print("wierzcholek", x, ", X:",wspolrzednaXList[i],", Y:",wspolrzednaYList[i])
         arrPunktowX.append(wspolrzednaXList[i])#srodek X
         arrPunktowY.append(wspolrzednaYList[i])#srodek Y
-        rysujProstokat(A,B)
+        rysujProstokatv2(A,B)
+        '''
         if(A>B):
             odlegloscMiedzyWewnetrznymi=A
         else:
@@ -113,7 +151,7 @@ for x in range(0, len(wierzcholkiPrzeszkodaList)):
                 rysujProstokat(A*(2*x+1)/pow(2,(iteracjaWewnetrznychProstokatow)),B*(x*2+1)/pow(2,(iteracjaWewnetrznychProstokatow)))
             iteracjaWewnetrznychProstokatow=iteracjaWewnetrznychProstokatow+1
             odlegloscMiedzyWewnetrznymi=odlegloscMiedzyWewnetrznymi/2.82
-
+        '''
 
 df = pd.DataFrame()
 
