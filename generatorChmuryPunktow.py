@@ -17,7 +17,7 @@ promienList=[10,8,17]
 arrPunktowX=[]
 arrPunktowY=[]
 
-rozdzielczosc=5
+rozdzielczosc=1
 
 def rysujOkrag(promien):
     kat=0
@@ -53,7 +53,7 @@ for x in range(0, len(wierzcholkiPrzeszkodaList)):
                 for x in range (0,pow(2,(iteracjaSrodka-1))):
                     kat=0
                     krok=90
-                    rysujOkrag(licznikPromienia*(promienSrodek))
+                    rysujOkrag(licznikPromienia/(promienSrodek))
                     licznikPromienia=licznikPromienia+2
                 odlegloscWSrodku=odlegloscWSrodku/2
                 iteracjaSrodka=iteracjaSrodka+1
