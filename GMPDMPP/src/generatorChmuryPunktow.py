@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from matplotlib.pyplot import colorbar
 import grafListy
+import os,sys
 
 wierzcholekAList=[]
 wierzcholekBList=[]
@@ -41,8 +42,11 @@ bokB=parametrB
 arrPunktowX=[]
 arrPunktowY=[]
 
+rozmiarX=150
+rozmiarY=150
+
 rozdzielczoscKol=4
-rozdzielczoscProstokatow=6;
+rozdzielczoscProstokatow=6
 
 def rysujLiniePozioma(A,xStart,y):
     xStop=xStart+A
@@ -156,30 +160,32 @@ for x in range(0, len(wierzcholkiPrzeszkodaList)):
         arrPunktowY.append(wspolrzednaYList[i])#srodek Y
         rysujProstokatv2(A,B)
 
-df = pd.DataFrame()
+tablica2D = [[0] * rozmiarX for i in range(rozmiarY)]
+for i in range(0, len(arrPunktowX)):
+    tablica2D[math.floor(arrPunktowX[i])][math.floor(arrPunktowY[i])]=1
+#print(tablica2D)
 
-df['x'] = arrPunktowX
-df['y'] = arrPunktowY
 
-df.head()
+# open file for writing 
+filename = 'x.pgm'
+with open(filename, 'w+') as f:
+    print('P1', file=f)
+    print(rozmiarX," ",rozmiarY,file=f) 
+    for i in range(0, rozmiarX):
+        for j in range(0, rozmiarY): 
+            print(tablica2D[i][j]," ",file=f,end="")
+        print(" ",file=f)
 
-fig, ax = plt.subplots()
-
-sns.kdeplot(df['x'],df['y'], n_levels=2, shade="True", ax=ax).set_title('Mapa prawdopodobieństwa metodą pól potencjałów')
-
-sns.kdeplot(df['x'],df['y'], n_levels=2, ax=ax)
-
-sns.regplot(x=df['x'],y=df['y'], fit_reg=False, ax=ax)
-
-#plt.streamplot(df['x'],df['y'])
-#streamplot - histogram przepływu
-
+#df = pd.DataFrame()
+#df['x'] = arrPunktowX
+#df['y'] = arrPunktowY
+#df.head()
+#fig, ax = plt.subplots()
+#sns.kdeplot(df['x'],df['y'], n_levels=2, shade="True", ax=ax).set_title('Mapa prawdopodobieństwa metodą pól potencjałów')
+#sns.kdeplot(df['x'],df['y'], n_levels=2, ax=ax)
+#sns.regplot(x=df['x'],y=df['y'], fit_reg=False, ax=ax)
 #same punkty z nakladaniem sie
-sns.lmplot( x="x", y="y", data=df, fit_reg=False)
-
+#sns.lmplot( x="x", y="y", data=df, fit_reg=False)
 #ten z rozkladem punktow na bokach
-sns.jointplot(x=df["x"], y=df["y"],n_levels=2, kind='kde')
-
-
-
-plt.show()
+#sns.jointplot(x=df["x"], y=df["y"],n_levels=2, kind='kde')
+#plt.show()
