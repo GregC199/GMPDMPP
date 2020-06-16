@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from matplotlib.pyplot import colorbar
 import grafListy
+import os,sys
 
 wierzcholekAList=[]
 wierzcholekBList=[]
@@ -127,15 +128,12 @@ def rysujOkrag(promien):
         kat=krok
         odleglosc=krok/360*2*math.pi*promien
         
-def obliczRozmiary():
-    
-    najwieksza_x = math.ceil(max(wspolrzednaXList)/10)*10+20
-    najwieksza_y = math.ceil(max(wspolrzednaYList)/10)*10+20
-    
-    return [0,najwieksza_x,0,najwieksza_y]
-#
+
+
 #                Program główny
 #
+
+
 
 for x in range(0, len(wierzcholkiPrzeszkodaList)):
     typ=przeszkodaTypList[x]
@@ -166,20 +164,37 @@ for x in range(0, len(wierzcholkiPrzeszkodaList)):
         arrPunktowY.append(wspolrzednaYList[i])#srodek Y
         rysujProstokatv2(A,B)
 
+#macierz 
+
+tablica2D = [[0] * rozmiarX for i in range(rozmiarY)]
+for i in range(0, len(arrPunktowX)):
+    tablica2D[math.floor(arrPunktowX[i])][math.floor(arrPunktowY[i])]=1
+#print(tablica2D)
+
+
+# open file for writing 
+filename = 'x.pgm'
+with open(filename, 'w+') as f:
+    print('P1', file=f)
+    print(rozmiarX," ",rozmiarY,file=f) 
+    for i in range(0, rozmiarX):
+        for j in range(0, rozmiarY): 
+            print(tablica2D[i][j]," ",file=f,end="")
+        print(" ",file=f)
 df = pd.DataFrame()
 
 df['x'] = arrPunktowX
 df['y'] = arrPunktowY
 
+
+
+    
+
 df.head()
 
-rozmiary = obliczRozmiary()
 
 
 fig, ax = plt.subplots()
-
-ax.set_xlim(rozmiary[0],rozmiary[1])
-ax.set_ylim(rozmiary[2],rozmiary[3])
 
 
 
