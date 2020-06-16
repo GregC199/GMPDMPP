@@ -8,6 +8,7 @@ from matplotlib.pyplot import colorbar
 import grafListy
 import os,sys
 from reportlab.lib.colors import red
+from Crypto.Random.random import randrange
 
 wierzcholekAList=[]
 wierzcholekBList=[]
@@ -266,21 +267,41 @@ ZnajdzMiejsceNaPotNiski(3)
 for i in range(0, len(arrNiskiX)):
     tablica2D[math.floor(arrNiskiX[i])][math.floor(arrNiskiY[i])]=-1
 
+#tworzenie calosci punktow
+caloscX=[]
+caloscY=[]
+
+losowanie = 0
+
+for i in range(rozmiarX):
+    for j in range(rozmiarY):
+        losowanie = randrange(1001)
+        if tablica2D[i][j] == -1:
+            
+            if losowanie < 100:
+                caloscX.append(i)
+                caloscY.append(j)
+                
+        elif tablica2D[i][j] == 0:
+            
+            if losowanie < 400:
+                caloscX.append(i)
+                caloscY.append(j)
+        
+        elif tablica2D[i][j] == 1:
+            
+            if losowanie < 900:
+                caloscX.append(i)
+                caloscY.append(j)
+
+#
+#przeszkody
+#
 df['x'] = arrPunktowX
 df['y'] = arrPunktowY
     
-#############3
+
 df.head()
-
-
-f = pd.DataFrame()
-
-f['x'] = arrNiskiX
-f['y'] = arrNiskiY
-
-f.head()
-
-fi, a = plt.subplots()
 
 fig, ax = plt.subplots()
 
@@ -303,10 +324,41 @@ sns.lmplot( x="x", y="y", data=df, fit_reg=False)
 #ten z rozkladem punktow na bokach
 sns.jointplot(x=df["x"], y=df["y"],n_levels=2, kind='kde')
 
+
+#
+#niskie potencjaly
+#
+f = pd.DataFrame()
+
+f['x'] = arrNiskiX
+f['y'] = arrNiskiY
+
+f.head()
+
+fi, a = plt.subplots()
 #wykres rozmiejscowienia przeszkod i niskich potencjalow
 
 sns.regplot(x=f['x'], y=f['y'], fit_reg=False,color='r', ax=a).set_title('Rozmieszczenie przeszkód(niebieski) i niskich potencjałów(czerwony)')
 
 sns.regplot(x=df['x'], y=df['y'], fit_reg=False, color='b', ax=a)
+
+#
+#calosc
+#
+calosc = pd.DataFrame()
+
+calosc['x'] = caloscX
+calosc['y'] = caloscY
+
+calosc.head()
+
+figure, axes = plt.subplots()
+
+sns.regplot(x=calosc['x'], y=calosc['y'], fit_reg=False, color='k', ax=axes).set_title('Mapa prawdopodobieństwa - punktowa')
+
+
+
+
+
 
 plt.show()
