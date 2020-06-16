@@ -126,7 +126,17 @@ def rysujOkrag(promien):
         krok=krok/2
         kat=krok
         odleglosc=krok/360*2*math.pi*promien
+        
+def obliczRozmiary():
     
+    najwieksza_x = math.ceil(max(wspolrzednaXList)/10)*10+20
+    najwieksza_y = math.ceil(max(wspolrzednaYList)/10)*10+20
+    
+    return [0,najwieksza_x,0,najwieksza_y]
+#
+#                Program główny
+#
+
 for x in range(0, len(wierzcholkiPrzeszkodaList)):
     typ=przeszkodaTypList[x]
     i=wierzcholkiPrzeszkodaList[x]
@@ -163,13 +173,22 @@ df['y'] = arrPunktowY
 
 df.head()
 
+rozmiary = obliczRozmiary()
+
+
 fig, ax = plt.subplots()
+
+ax.set_xlim(rozmiary[0],rozmiary[1])
+ax.set_ylim(rozmiary[2],rozmiary[3])
+
+
 
 sns.kdeplot(df['x'],df['y'], n_levels=2, shade="True", ax=ax).set_title('Mapa prawdopodobieństwa metodą pól potencjałów')
 
 sns.kdeplot(df['x'],df['y'], n_levels=2, ax=ax)
 
 sns.regplot(x=df['x'],y=df['y'], fit_reg=False, ax=ax)
+
 
 #plt.streamplot(df['x'],df['y'])
 #streamplot - histogram przepływu
@@ -179,7 +198,6 @@ sns.lmplot( x="x", y="y", data=df, fit_reg=False)
 
 #ten z rozkladem punktow na bokach
 sns.jointplot(x=df["x"], y=df["y"],n_levels=2, kind='kde')
-
 
 
 plt.show()
