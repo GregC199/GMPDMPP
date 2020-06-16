@@ -131,9 +131,10 @@ def rysujOkrag(promien):
         
 def obliczRozmiary():
 
-    najwieksza_x = math.ceil(max(wspolrzednaXList)/10)*10+20
-    najwieksza_y = math.ceil(max(wspolrzednaYList)/10)*10+20
+    najwieksza_x = math.ceil(max(wspolrzednaXList)/10)*10
+    najwieksza_y = math.ceil(max(wspolrzednaYList)/10)*10
 
+    print("x max:" , najwieksza_x , "max y" , najwieksza_y)
     return [0,najwieksza_x,0,najwieksza_y]
 
 rozmiary = obliczRozmiary()
@@ -174,7 +175,7 @@ for x in range(0, len(wierzcholkiPrzeszkodaList)):
         rysujProstokatv2(A,B)
 
 #macierz 
-rozmiarX = rozmiary[1]
+rozmiarX = rozmiary[1]+10
 rozmiarY = rozmiary[3]
 
 tablica2D = [[0] * (rozmiarX) for i in range(rozmiarY)]
@@ -257,7 +258,10 @@ def ZnajdzMiejsceNaPotNiski(wielkosc_pola):
                     WyrysujPotencjalNiski(x_mem, y_mem, A, B)
             
     
-        
+for i in range(0, len(arrNiskiX)):
+    tablica2D[math.floor(arrNiskiX[i])][math.floor(arrNiskiY[i])]=-1
+
+
 
 ZnajdzMiejsceNaPotNiski(3)
 
