@@ -128,8 +128,16 @@ def rysujOkrag(promien):
         kat=krok
         odleglosc=krok/360*2*math.pi*promien
         
+def obliczRozmiary():
 
+    najwieksza_x = math.ceil(max(wspolrzednaXList)/10)*10+20
+    najwieksza_y = math.ceil(max(wspolrzednaYList)/10)*10+20
 
+    return [0,najwieksza_x,0,najwieksza_y]
+
+rozmiary = obliczRozmiary()
+
+#
 #                Program główny
 #
 
@@ -165,6 +173,9 @@ for x in range(0, len(wierzcholkiPrzeszkodaList)):
         rysujProstokatv2(A,B)
 
 #macierz 
+rozmiarX = rozmiary[1]
+rozmiarY = rozmiary[3]
+
 
 tablica2D = [[0] * rozmiarX for i in range(rozmiarY)]
 for i in range(0, len(arrPunktowX)):
@@ -196,7 +207,8 @@ df.head()
 
 fig, ax = plt.subplots()
 
-
+ax.set_xlim(rozmiary[0],rozmiary[1])
+ax.set_ylim(rozmiary[2],rozmiary[3])
 
 sns.kdeplot(df['x'],df['y'], n_levels=2, shade="True", ax=ax).set_title('Mapa prawdopodobieństwa metodą pól potencjałów')
 
