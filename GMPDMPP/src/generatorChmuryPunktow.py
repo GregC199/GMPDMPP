@@ -5,22 +5,38 @@ import random
 import matplotlib.pyplot as plt
 import seaborn as sns
 from matplotlib.pyplot import colorbar
+import grafListy
 
 wierzcholekAList=[]
 wierzcholekBList=[]
-wspolrzednaXList=[40, 9, 81, 83, 100, 22, 32, 16, 43, 65]
-wspolrzednaYList=[99, 70, 59, 87, 100, 54, 78, 24, 32, 44]
-wierzcholkiPrzeszkodaList=[4,6,9,1,3,7]
-przeszkodaTypList=['o','o','o','k','k','k']
-promienList=[0,0,0,0,10,0,8,0,0,17]
-bokA=[0,16,0,16,0,0,0,10,0,0]
-bokB=[0,12,0,10,0,0,0,42,0,0]
+#wspolrzednaXList=[40, 9, 81, 83, 100, 22, 32, 16, 43, 65]
+#wspolrzednaYList=[99, 70, 59, 87, 100, 54, 78, 24, 32, 44]
+#wierzcholkiPrzeszkodaList=[4,6,9,1,3,7]
+#przeszkodaTypList=['o','o','o','k','k','k']
+#promienList=[0,0,0,0,10,0,8,0,0,17]
+#bokA=[0,16,0,16,0,0,0,10,0,0]
+#bokB=[0,12,0,10,0,0,0,42,0,0]
+
 #wierzcholkiPrzeszkodaList=[5]
 #przeszkodaTypList=['o']
 #promienList=[0,0,0,0,10,20,8,0,0,17]
 #bokA=[0,8,0,8,0,20,0,5,0,0]
 #bokB=[0,6,0,5,0,20,0,21,0,0]
 
+obiekt=grafListy.graf()
+obiekt.inicjuj('test.dat')
+
+wspolrzednaXList=obiekt.wspolrzednaXList
+wspolrzednaYList=obiekt.wspolrzednaYList
+wierzcholkiPrzeszkodaList=obiekt.wierzcholkiPrzeszkodaList
+przeszkodaTypList=obiekt.przeszkodaTypList
+
+parametrA=obiekt.parametrPrzeszkodyA
+parametrB=obiekt.parametrPrzeszkodyB
+
+promienList=parametrA
+bokA=parametrA
+bokB=parametrB
 
 arrPunktowX=[]
 arrPunktowY=[]
