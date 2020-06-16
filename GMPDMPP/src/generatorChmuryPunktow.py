@@ -7,6 +7,7 @@ import seaborn as sns
 from matplotlib.pyplot import colorbar
 import grafListy
 import os,sys
+from reportlab.lib.colors import red
 
 wierzcholekAList=[]
 wierzcholekBList=[]
@@ -260,13 +261,21 @@ def ZnajdzMiejsceNaPotNiski(wielkosc_pola):
 
 ZnajdzMiejsceNaPotNiski(3)
 
-df['x'] = arrNiskiX
-df['y'] = arrNiskiY
+df['x'] = arrPunktowX
+df['y'] = arrPunktowY
     
 #############3
 df.head()
 
 
+f = pd.DataFrame()
+
+f['x'] = arrNiskiX
+f['y'] = arrNiskiY
+
+f.head()
+
+fi, a = plt.subplots()
 
 fig, ax = plt.subplots()
 
@@ -289,5 +298,10 @@ sns.lmplot( x="x", y="y", data=df, fit_reg=False)
 #ten z rozkladem punktow na bokach
 sns.jointplot(x=df["x"], y=df["y"],n_levels=2, kind='kde')
 
+#wykres rozmiejscowienia przeszkod i niskich potencjalow
+
+sns.regplot(x=f['x'], y=f['y'], fit_reg=False,color='r', ax=a).set_title('Rozmieszczenie przeszkód(niebieski) i niskich potencjałów(czerwony)')
+
+sns.regplot(x=df['x'], y=df['y'], fit_reg=False, color='b', ax=a)
 
 plt.show()
