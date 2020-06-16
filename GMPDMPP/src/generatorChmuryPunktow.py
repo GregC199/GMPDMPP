@@ -256,14 +256,15 @@ def ZnajdzMiejsceNaPotNiski(wielkosc_pola):
                     Y_mem = mozliwe_potencjaly_Y[len(mozliwe_potencjaly_X) - i - 1]
                     print("niski pot srodek", ", X:",x_mem,", Y:",y_mem)
                     WyrysujPotencjalNiski(x_mem, y_mem, A, B)
-            
-    
-for i in range(0, len(arrNiskiX)):
-    tablica2D[math.floor(arrNiskiX[i])][math.floor(arrNiskiY[i])]=-1
+      
 
 
 
 ZnajdzMiejsceNaPotNiski(3)
+
+#dodanie niskich potencjałów do macierzy
+for i in range(0, len(arrNiskiX)):
+    tablica2D[math.floor(arrNiskiX[i])][math.floor(arrNiskiY[i])]=-1
 
 df['x'] = arrPunktowX
 df['y'] = arrPunktowY
