@@ -51,6 +51,8 @@ arrPunktowY=[]
 rozdzielczoscKol=1
 rozdzielczoscProstokatow=1
 
+
+
 def rysujLiniePozioma(A,xStart,y):
     xStop=xStart+A
     arrPunktowX.append(xStart)
@@ -180,7 +182,7 @@ for x in range(0, len(wierzcholkiPrzeszkodaList)):
         rysujProstokatv2(A,B)
 
 #macierz 
-rozmiarX = rozmiary[1]+10
+rozmiarX = rozmiary[1] + 10
 rozmiarY = rozmiary[3]
 
 tablica2D = [[0] * (rozmiarX) for i in range(rozmiarY)]
@@ -303,7 +305,21 @@ for i in range(rozmiarX):
 #
 df['x'] = arrPunktowX
 df['y'] = arrPunktowY
+
+
     
+def Tablica16x2D():
+    
+    for x in range(0,rozmiarX):
+        for y in range(0, rozmiarY):
+            
+            powtorzenia = tablica2D[x][y]
+            for i in (16*x,16*x+16):
+                for j in (16*y,16*y+16):
+                    while tablica2D[x][y] > powtorzenia:
+                        caloscX.append(i)
+                        caloscY.append(j)
+                        
 
 df.head()
 
