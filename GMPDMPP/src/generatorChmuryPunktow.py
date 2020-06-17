@@ -40,7 +40,7 @@ arrKrawedziY=[]
 #
 
 obiekt=grafListy.graf()
-obiekt.inicjuj('test.dat')
+obiekt.inicjuj('graf.dat')
 
 wspolrzednaXList=obiekt.wspolrzednaXList
 wspolrzednaYList=obiekt.wspolrzednaYList
@@ -59,13 +59,12 @@ def wyswietlMenu():
     print("0 - zakoncz prace programu")
     print("1 - wyswietl przeszkody")
     print("2 - wyswietl wykres wykonany w kde")
-    print("3 - wyswietl wykres wykonany w seaborn")
-    print("4 - wyswietl histogram wykonany przy pomocy biblioteki matplotlib")
-    print("5 - wyswietl wyswietl mape punktow wykonana przy pomocy gestosci prawdopodobienstwa")
-    print("6 - wyswietl punkty wylosowane przy nalozeniu funkcji rozkladu prawodopobienstwa")
-    print("7 - wyswietl histogram")
-    print("8 - wyswietl mape w formacie pgm")
-    print("9 - wyswietl mape prawdopodobienstwa (moze zajac pare minut..)")    
+    print("3 - wyswietl wykres wykonany w kde z dodatkowym histogramem po bokach")
+    print("4 - wyswietl wykres wygenerowany w seaborn")
+    print("5 - wyswietl punkty wylosowane przy nalozeniu funkcji rozkladu prawodopobienstwa")
+    print("6 - wyswietl histogram")
+    print("7 - wyswietl mape w formacie pgm")
+    print("8 - wyswietl mape prawdopodobienstwa (moze zajac pare minut..)")    
 
  # 1 - przeszkody punkty niebieskie, 2 - zielony z konturami, 3 - ???, 4 - to z bokami, 5 - przeszkody punkty + niski potencjał na czerwono
  # 6 - punkty duzo, 7 - histogram, 8 - nie chce sie policzyc ://, 9 - pgm     
@@ -465,13 +464,10 @@ while wybor!=0:
         sns.kdeplot(df['x'],df['y'], n_levels=2)
         plt.show()
     elif wybor==3:
-        sns.regplot(x=df['x'],y=df['y'], fit_reg=False)
-        plt.show()
-    elif wybor==4:
         #ten z rozkladem punktow na bokach
         sns.jointplot(x=df["x"], y=df["y"],n_levels=2, kind='kde')
         plt.show()
-    elif wybor==5:
+    elif wybor==4:
         #
         #niskie potencjaly
         #
@@ -488,7 +484,7 @@ while wybor!=0:
 
         sns.regplot(x=df['x'], y=df['y'], fit_reg=False, color='b', ax=a)
         plt.show()
-    elif wybor==6:
+    elif wybor==5:
         #
         #calosc
         #
@@ -507,7 +503,7 @@ while wybor!=0:
 
         plt.plot(caloscX,caloscY,'.',color='black')
         plt.show()
-    elif wybor==7:
+    elif wybor==6:
         #
         #calosc
         #
@@ -526,9 +522,9 @@ while wybor!=0:
 
         plt.colorbar(b[3], ax=axis)
         plt.show()
-    elif wybor==8:
+    elif wybor==7:
         przygotujPlikPgm()
-    elif wybor==9:
+    elif wybor==8:
 
         #
         #calosc
