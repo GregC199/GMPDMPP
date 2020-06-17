@@ -9,26 +9,37 @@ import grafListy
 import os,sys
 from reportlab.lib.colors import red
 from Crypto.Random.random import randrange
-#from scipy.ndimage import gaussian_filter
 from matplotlib.colors import LogNorm
 
 
 
+
+
+rozdzielczosc_hisogram = 8
+rozdzielczoscKol=1
+rozdzielczoscProstokatow=1
+
+df = pd.DataFrame()
+f = pd.DataFrame()
+calosc = pd.DataFrame()
+
+arrNiskiX=[]
+arrNiskiY=[]
+
+arrPunktowX=[]
+arrPunktowY=[]
+
 wierzcholekAList=[]
 wierzcholekBList=[]
-#wspolrzednaXList=[40, 9, 81, 83, 100, 22, 32, 16, 43, 65]
-#wspolrzednaYList=[99, 70, 59, 87, 100, 54, 78, 24, 32, 44]
-#wierzcholkiPrzeszkodaList=[4,6,9,1,3,7]
-#przeszkodaTypList=['o','o','o','k','k','k']
-#promienList=[0,0,0,0,10,0,8,0,0,17]
-#bokA=[0,16,0,16,0,0,0,10,0,0]
-#bokB=[0,12,0,10,0,0,0,42,0,0]
 
-#wierzcholkiPrzeszkodaList=[5]
-#przeszkodaTypList=['o']
-#promienList=[0,0,0,0,10,20,8,0,0,17]
-#bokA=[0,8,0,8,0,20,0,5,0,0]
-#bokB=[0,6,0,5,0,20,0,21,0,0]
+caloscX=[]
+caloscY=[]
+
+
+#
+#inicjowanie wczytania grafu
+#
+
 
 obiekt=grafListy.graf()
 obiekt.inicjuj('test.dat')
@@ -45,12 +56,21 @@ promienList=parametrA
 bokA=parametrA
 bokB=parametrB
 
-arrPunktowX=[]
-arrPunktowY=[]
+def obliczRozmiary():
 
-rozdzielczoscKol=1
-rozdzielczoscProstokatow=1
+    najwieksza_x = math.ceil(max(wspolrzednaXList)/10)*10
+    najwieksza_y = math.ceil(max(wspolrzednaYList)/10)*10
 
+    print("x max:" , najwieksza_x , "max y" , najwieksza_y)
+    return [0,max(najwieksza_x,najwieksza_y),0,max(najwieksza_x,najwieksza_y)]
+
+rozmiary = obliczRozmiary()
+
+rozmiarX = rozmiary[1]
+rozmiarY = rozmiary[3]
+#
+#Przeszkody
+#
 
 
 def rysujLiniePozioma(A,xStart,y):
@@ -136,18 +156,10 @@ def rysujOkrag(promien):
         kat=krok
         odleglosc=krok/360*2*math.pi*promien
         
-def obliczRozmiary():
 
-    najwieksza_x = math.ceil(max(wspolrzednaXList)/10)*10
-    najwieksza_y = math.ceil(max(wspolrzednaYList)/10)*10
-
-    print("x max:" , najwieksza_x , "max y" , najwieksza_y)
-    return [0,najwieksza_x,0,najwieksza_y]
-
-rozmiary = obliczRozmiary()
 
 #
-#                Program główny
+#                Przeszkody obsługa
 #
 
 
@@ -181,9 +193,11 @@ for x in range(0, len(wierzcholkiPrzeszkodaList)):
         arrPunktowY.append(wspolrzednaYList[i])#srodek Y
         rysujProstokatv2(A,B)
 
-#macierz 
-rozmiarX = rozmiary[1] + 10
-rozmiarY = rozmiary[3]
+
+
+#
+#zapis przeszkod do macierzy
+#
 
 tablica2D = [[0] * (rozmiarX) for i in range(rozmiarY)]
 for i in range(0, len(arrPunktowX)):
@@ -200,20 +214,14 @@ with open(filename, 'w+') as f:
         for j in range(0, rozmiarY): 
             print(tablica2D[i][j]," ",file=f,end="")
         print(" ",file=f)"""
-df = pd.DataFrame()
 
 
 
 
 ########### Niski potencjał
-arrNiskiX=[]
-arrNiskiY=[]
 
 def WyrysujPotencjalNiski(x_wsp,y_wsp,a,b):
-    #x_wsp = round(x_wsp)
-    #y_wsp = round(y_wsp)
-    #a = round(a)
-    #b = round(b)
+
     for i in range (x_wsp,x_wsp+a):
         for j in range(y_wsp,y_wsp+b):
             arrNiskiX.append(i)
@@ -247,7 +255,7 @@ def ZnajdzMiejsceNaPotNiski(wielkosc_pola):
                 mozliwe_potencjaly_Y.append(y)
     
     x_mem = mozliwe_potencjaly_X[0]
-    Y_mem = mozliwe_potencjaly_Y[0]
+    y_mem = mozliwe_potencjaly_Y[0]
     print("niski pot srodek", ", X:",x_mem,", Y:",y_mem)
     WyrysujPotencjalNiski(x_mem, y_mem, A, B)
     
@@ -260,67 +268,92 @@ def ZnajdzMiejsceNaPotNiski(wielkosc_pola):
         if znaleziono == False:
             if mozliwe_potencjaly_X[len(mozliwe_potencjaly_X) - i - 1] > x_mem and mozliwe_potencjaly_Y[len(mozliwe_potencjaly_X) - i - 1] > y_mem:
                     x_mem = mozliwe_potencjaly_X[len(mozliwe_potencjaly_X) - i - 1]
-                    Y_mem = mozliwe_potencjaly_Y[len(mozliwe_potencjaly_X) - i - 1]
+                    y_mem = mozliwe_potencjaly_Y[len(mozliwe_potencjaly_X) - i - 1]
                     print("niski pot srodek", ", X:",x_mem,", Y:",y_mem)
                     WyrysujPotencjalNiski(x_mem, y_mem, A, B)
       
 
 
 
+
+#
+#Oblsuga potencjalow niskich
+#
 ZnajdzMiejsceNaPotNiski(10)
 
 #dodanie niskich potencjałów do macierzy
 for i in range(0, len(arrNiskiX)):
     tablica2D[math.floor(arrNiskiX[i])][math.floor(arrNiskiY[i])]=-1
 
+#
 #tworzenie calosci punktow
-caloscX=[]
-caloscY=[]
+#
+
+'''
+tutaj rozmycie lub poniżej tej części kodu
+'''
 
 losowanie = 0
 
 for i in range(rozmiarX):
     for j in range(rozmiarY):
         
+        #print("tablica i:", i, " j:",j)
         if tablica2D[i][j] == -1:
             
-             losowanie = randrange(256/100*4)
-             tablica2D[i][j] = losowanie
+            losowanie = randrange(0,math.floor(0.05*rozdzielczosc_hisogram*rozdzielczosc_hisogram))
+            tablica2D[i][j] = losowanie
+            
+            #print("losowanie:",losowanie)
                 
                 
         elif tablica2D[i][j] == 0:
             
-            losowanie = randrange(256/100*34)
-            tablica2D[i][j] = losowanie
-
+            tablica2D[i][j] = randrange(math.floor(0.34*rozdzielczosc_hisogram*rozdzielczosc_hisogram),math.floor(0.5*rozdzielczosc_hisogram*rozdzielczosc_hisogram))
+            
+            #print("tablica2D:",tablica2D[i][j])
         
         elif tablica2D[i][j] == 1:
             
-            losowanie = randrange(256/100*94)
-             tablica2D[i][j] = losowanie
-                
+            losowanie = randrange(math.floor(0.94*rozdzielczosc_hisogram*rozdzielczosc_hisogram),math.floor(1*rozdzielczosc_hisogram*rozdzielczosc_hisogram))
+            tablica2D[i][j] = losowanie
+            #print("tablica2D:",tablica2D[i][j])
 
-#
-#przeszkody
-#
-df['x'] = arrPunktowX
-df['y'] = arrPunktowY
+'''
+tutaj rozmycie lub wyżej
+'''
+
 
 
     
-def Tablica16x2D():
+def Tablica2DxRozdzielczosc(rozdzielczosc):
     
     for x in range(0,rozmiarX):
         for y in range(0, rozmiarY):
             
             powtorzenia = 0
-            for i in (16*x,16*x+16):
-                for j in (16*y,16*y+16):
-                    while tablica2D[x][y] > powtorzenia:
+            for i in range(rozdzielczosc*x,rozdzielczosc*x+rozdzielczosc):
+                for j in range(rozdzielczosc*y,rozdzielczosc*y+rozdzielczosc):
+                    if tablica2D[x][y] > powtorzenia:
                         caloscX.append(i)
                         caloscY.append(j)
-                        powtorzenia += 1
                         
+                        #print("dodaje punkt i:",i," j:",j)
+                        
+                        powtorzenia = powtorzenia + 1
+                        
+Tablica2DxRozdzielczosc(rozdzielczosc_hisogram)
+
+
+#
+#wykresy
+#
+
+#przeszkody
+
+#przeszkody zapisane do datafrema
+df['x'] = arrPunktowX
+df['y'] = arrPunktowY
 
 df.head()
 
@@ -336,9 +369,6 @@ sns.kdeplot(df['x'],df['y'], n_levels=2, ax=ax)
 sns.regplot(x=df['x'],y=df['y'], fit_reg=False, ax=ax)
 
 
-#plt.streamplot(df['x'],df['y'])
-#streamplot - histogram przepływu
-
 #same punkty z nakladaniem sie
 sns.lmplot( x="x", y="y", data=df, fit_reg=False)
 
@@ -350,7 +380,6 @@ sns.jointplot(x=df["x"], y=df["y"],n_levels=2, kind='kde')
 #
 #niskie potencjaly
 #
-f = pd.DataFrame()
 
 f['x'] = arrNiskiX
 f['y'] = arrNiskiY
@@ -367,33 +396,44 @@ sns.regplot(x=df['x'], y=df['y'], fit_reg=False, color='b', ax=a)
 #
 #calosc
 #
-calosc = pd.DataFrame()
+
+
 
 calosc['x'] = caloscX
 calosc['y'] = caloscY
 
 calosc.head()
 
+'''
+plt.streamplot(calosc['x'],calosc['y'])
+streamplot - histogram przepływu'''
+
+
+#punkty
 figure, axes = plt.subplots()
 
 plt.title('Mapa prawdopodobieństwa punktowa')
 
-for i in range(len(caloscX)):
-    plt.plot(caloscX[i],caloscY[i],'.',color='black')
+plt.plot(caloscX,caloscY,'.',color='black')
 
+#histogram 2D
 figur, axis = plt.subplots()
 
 
-b = axis.hist2d(calosc['x'], calosc['y'],bins=(rozmiarX/4,rozmiarY/4))
+b = axis.hist2d(calosc['x'], calosc['y'],bins=(rozmiarX/2,rozmiarY/2))
 
 
-#plt.pcolormesh(calosc, shading='gouraud')
+plt.pcolormesh(calosc, shading='gouraud')
 
-plt.title('Histogram 2D mapy prawdopodobieństwa')
+plt.title('Histogram 2D mapy prawdopodobieństwa, 0 - ujemny potencjał, 255 - dodatni potencjał')
 
 plt.colorbar(b[3], ax=axis)
 
+#zagęszczenie
+
 new, axxx = plt.subplots()
-sns.kdeplot(calosc['x'],calosc['y'],n_levels=2, shade="True").set_title('Mapa prawdopodobieństwa metodą pól potencjałów')
+sns.kdeplot(calosc['x'],calosc['y'],n_levels=2, shade="True",ax=axxx).set_title('Mapa prawdopodobieństwa - zagęszczenie')
+
+sns.kdeplot(df['x'],df['y'], n_levels=2, ax=axxx)
 
 plt.show()
