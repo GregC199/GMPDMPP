@@ -50,6 +50,11 @@ arrPunktowY=[]
 
 rozdzielczoscKol=1
 rozdzielczoscProstokatow=1
+rozdzielczoscKolWewn=1
+
+arrKrawedziX=[]
+arrKrawedziY=[]
+
 
 def rysujLiniePozioma(A,xStart,y):
     xStop=xStart+A
@@ -79,6 +84,20 @@ def rysujProstokat(A,B):
     arrPunktowY.append(wspolrzednaYList[i]-B/2)
     arrPunktowX.append(wspolrzednaXList[i]+A/2)
     arrPunktowY.append(wspolrzednaYList[i]-B/2)
+
+
+    #DO ZNAJDYWANIA PUNKTOW PRZEJSCIOWYCH
+    arrKrawedziX.append(wspolrzednaXList[i]+A/2)
+    arrKrawedziY.append(wspolrzednaYList[i]+B/2)
+    arrKrawedziX.append(wspolrzednaXList[i]-A/2)
+    arrKrawedziY.append(wspolrzednaYList[i]+B/2)
+    arrKrawedziX.append(wspolrzednaXList[i]-A/2)
+    arrKrawedziY.append(wspolrzednaYList[i]-B/2)
+    arrKrawedziX.append(wspolrzednaXList[i]+A/2)
+    arrKrawedziY.append(wspolrzednaYList[i]-B/2)
+
+
+
     odlegloscA=A
     odlegloscB=B
     iteracjaA=1
@@ -90,6 +109,15 @@ def rysujProstokat(A,B):
             arrPunktowY.append(wspolrzednaYList[i]+B/2)
             arrPunktowX.append(wspolrzednaXList[i]-A/2+(x*2+1)*A/mianownik)
             arrPunktowY.append(wspolrzednaYList[i]-B/2)
+      
+
+            #DO ZNAJDYWANIA PUNKTOW PRZEJSCIOWYCH
+            arrKrawedziX.append(wspolrzednaXList[i]-A/2+(x*2+1)*A/mianownik)
+            arrKrawedziY.append(wspolrzednaYList[i]+B/2)
+            arrKrawedziX.append(wspolrzednaXList[i]-A/2+(x*2+1)*A/mianownik)
+            arrKrawedziY.append(wspolrzednaYList[i]-B/2)
+      
+
         iteracjaA=iteracjaA+1
         odlegloscA=odlegloscA/2
     while odlegloscB>rozdzielczoscProstokatow:
@@ -99,6 +127,15 @@ def rysujProstokat(A,B):
             arrPunktowY.append(wspolrzednaYList[i]-B/2+(x*2+1)*B/mianownik)
             arrPunktowX.append(wspolrzednaXList[i]-A/2)
             arrPunktowY.append(wspolrzednaYList[i]-B/2+(x*2+1)*B/mianownik)    
+        
+
+            #DO ZNAJDYWANIA PUNKTOW PRZEJSCIOWYCH
+            arrKrawedziX.append(wspolrzednaXList[i]+A/2)
+            arrKrawedziY.append(wspolrzednaYList[i]-B/2+(x*2+1)*B/mianownik)
+            arrKrawedziX.append(wspolrzednaXList[i]-A/2)
+            arrKrawedziY.append(wspolrzednaYList[i]-B/2+(x*2+1)*B/mianownik)    
+        
+
         iteracjaB=iteracjaB+1
         odlegloscB=odlegloscB/2
 
@@ -121,7 +158,7 @@ def rysujProstokatv2(A,B):
 
 
 
-def rysujOkrag(promien):
+def rysujOkrag(promien, czyKrawedz):
     kat=0
     krok=90
     odleglosc=999
@@ -129,10 +166,17 @@ def rysujOkrag(promien):
         while kat<360:
             arrPunktowX.append(promien*math.cos(kat*math.pi/180)+wspolrzednaXList[i])
             arrPunktowY.append(promien*math.sin(kat*math.pi/180)+wspolrzednaYList[i])
+            
+            #DO ZNAJDYWANIA PUNKTOW PRZEJSCIOWYCH
+            if czyKrawedz=='y':
+                arrKrawedziX.append(promien*math.cos(kat*math.pi/180)+wspolrzednaXList[i])
+                arrKrawedziY.append(promien*math.sin(kat*math.pi/180)+wspolrzednaYList[i])
             kat=kat+krok
         krok=krok/2
         kat=krok
         odleglosc=krok/360*2*math.pi*promien
+        
+
         
 def obliczRozmiary():
 
@@ -160,17 +204,13 @@ for x in range(0, len(wierzcholkiPrzeszkodaList)):
         arrPunktowX.append(wspolrzednaXList[i])#srodek X
         arrPunktowY.append(wspolrzednaYList[i])#srodek Y
         #W tej funkcji dodawane sa punkty na okregu
-        rysujOkrag(promien)
+        rysujOkrag(promien,'y')
         odlegloscWSrodku=promien
         #W tym while dodawane sa punkty wewnatrz okregu (czyli punkty na okregu o mniejszym promieniu)
         iteracjaSrodka=1
-        while odlegloscWSrodku>rozdzielczoscKol:
-                for x in range (0,pow(2,(iteracjaSrodka-1))):
-                    rysujOkrag(promien*(2*x+1)/(pow(2,iteracjaSrodka)))
-                odlegloscWSrodku=odlegloscWSrodku/math.pi
-                iteracjaSrodka=iteracjaSrodka+1
-        #jesli wieksza niz rozdzielczosc to dodaj pomiedzy srodkiem a punktami na luku
-        #po wyjsciu z while (dobra rozdzielczosc w srodku) przeszkoda jest gotowa
+        #while odlegloscWSrodku>rozdzielczoscKolWewn:
+        for x in range (1,promien-1):
+            rysujOkrag(x,'n')
     else:#przeszkoda jest kwadratem
         A=bokA[i]
         B=bokB[i]
@@ -183,21 +223,72 @@ for x in range(0, len(wierzcholkiPrzeszkodaList)):
 rozmiarX = rozmiary[1]+10
 rozmiarY = rozmiary[3]
 
-tablica2D = [[0] * (rozmiarX) for i in range(rozmiarY)]
+print(rozmiarX)
+print(rozmiarY)
+
+tablica2D = [[0] * rozmiarX for i in range(rozmiarY)]
 for i in range(0, len(arrPunktowX)):
-    tablica2D[math.floor(arrPunktowX[i])][math.floor(arrPunktowY[i])]=1
+    tablica2D[math.floor(arrPunktowX[i])][math.floor(arrPunktowY[i])]=255
 #print(tablica2D)
 
-"""
-# open file for writing 
+print("Wszystkie punkty: ",len(arrPunktowX),", punkty na krawedzi: ",len(arrKrawedziX))
+
+for i in range(0, rozmiarX):
+    print(i)
+    for j in range(0, rozmiarY): 
+        if tablica2D[i][j]==0:
+            if i%3==1 and j%3==1:
+                #na poczatku przypisuje jakas wysoka
+                odlegloscOdWysokiego=10000
+                ###for przejezdza po wszystkich punktach z arrPunktowX i arrPunktowY
+                for x in range(0, len(arrKrawedziX)):
+                    #Dla każdego ze sprawdzanych punktów liczy odległość jeszcze raz
+                    odlegloscTmp=math.sqrt(((arrKrawedziX[x]-i)*(arrKrawedziX[x]-i))+((arrKrawedziY[x]-j)*(arrKrawedziY[x]-j)))
+                    if odlegloscTmp<odlegloscOdWysokiego:
+                        odlegloscOdWysokiego=odlegloscTmp
+                        #przypisz 1/wartość do odpowiedniego pola w tablicy 2D (może być * współczynnik)
+                        if odlegloscOdWysokiego!=0:
+                            wartosc=math.floor(255/(odlegloscOdWysokiego*0.2))
+                        if wartosc<255:
+                            tablica2D[i][j]=wartosc
+                        else:
+                            tablica2D[i][j]=255
+for i in range(0, rozmiarX):
+    print(i)
+    for j in range(0, rozmiarY): 
+        if tablica2D[i][j]==0:
+            #KOPIUJE WARTOŚĆ Z SĄSIEDZTWA
+            if i%3==0 and j%3==0 and i<rozmiarX-1 and j<rozmiarY-1:#nie działa
+                tablica2D[i][j]=tablica2D[i+1][j+1]
+            elif i%3==0 and j%3==1 and j<rozmiarY-1:#nie działa
+                tablica2D[i][j]=tablica2D[i+1][j]
+            elif i%3==0 and j%3==2 and i!=0 and j<rozmiarY-1:
+                tablica2D[i][j]=tablica2D[i+1][j-1]
+            elif i%3==1 and j%3==0 and i<rozmiarX-1:
+               tablica2D[i][j]=tablica2D[i][j+1]
+            elif i%3==1 and j%3==2 and i!=0:
+                tablica2D[i][j]=tablica2D[i][j-1]
+            elif i%3==2 and j%3==0 and j!=0 and i<rozmiarX-1:
+                tablica2D[i][j]=tablica2D[i-1][j+1]
+            elif i%3==2 and j%3==1 and j!=0:
+                tablica2D[i][j]=tablica2D[i-1][j]
+            elif i%3==2 and j%3==2 and j!=0 and i!=0:
+                tablica2D[i][j]=tablica2D[i-1][j-1]
+
+# open file for writing
 filename = 'x.pgm'
 with open(filename, 'w+') as f:
-    print('P1', file=f)
-    print(rozmiarX," ",rozmiarY,file=f) 
-    for i in range(0, rozmiarX):
-        for j in range(0, rozmiarY): 
-            print(tablica2D[i][j]," ",file=f,end="")
-        print(" ",file=f)"""
+    print('P2', file=f)
+    print(rozmiarX," ",rozmiarY,file=f)
+    print('255', file=f)
+    for i in reversed(range(0,rozmiarX)):
+        for j in range(0,rozmiarY): 
+            print(tablica2D[j][i]," ",file=f,end="")
+        print(" ",file=f)
+
+
+
+
 df = pd.DataFrame()
 
 
