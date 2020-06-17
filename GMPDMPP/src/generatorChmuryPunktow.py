@@ -9,6 +9,10 @@ import grafListy
 import os,sys
 from reportlab.lib.colors import red
 from Crypto.Random.random import randrange
+#from scipy.ndimage import gaussian_filter
+from matplotlib.colors import LogNorm
+
+
 
 wierzcholekAList=[]
 wierzcholekBList=[]
@@ -44,8 +48,8 @@ bokB=parametrB
 arrPunktowX=[]
 arrPunktowY=[]
 
-rozdzielczoscKol=4
-rozdzielczoscProstokatow=6;
+rozdzielczoscKol=1
+rozdzielczoscProstokatow=1
 
 def rysujLiniePozioma(A,xStart,y):
     xStop=xStart+A
@@ -261,7 +265,7 @@ def ZnajdzMiejsceNaPotNiski(wielkosc_pola):
 
 
 
-ZnajdzMiejsceNaPotNiski(3)
+ZnajdzMiejsceNaPotNiski(10)
 
 #dodanie niskich potencjałów do macierzy
 for i in range(0, len(arrNiskiX)):
@@ -275,22 +279,22 @@ losowanie = 0
 
 for i in range(rozmiarX):
     for j in range(rozmiarY):
-        losowanie = randrange(1001)
+        losowanie = randrange(101)
         if tablica2D[i][j] == -1:
             
-            if losowanie < 100:
+            if losowanie < 4:
                 caloscX.append(i)
                 caloscY.append(j)
                 
         elif tablica2D[i][j] == 0:
             
-            if losowanie < 400:
+            if losowanie < 34:
                 caloscX.append(i)
                 caloscY.append(j)
         
         elif tablica2D[i][j] == 1:
             
-            if losowanie < 900:
+            if losowanie < 94:
                 caloscX.append(i)
                 caloscY.append(j)
 
@@ -308,7 +312,7 @@ fig, ax = plt.subplots()
 ax.set_xlim(rozmiary[0],rozmiary[1])
 ax.set_ylim(rozmiary[2],rozmiary[3])
 
-sns.kdeplot(df['x'],df['y'], n_levels=2, shade="True", ax=ax).set_title('Mapa prawdopodobieństwa metodą pól potencjałów')
+sns.kdeplot(df['x'],df['y'], n_levels=2, shade="True", ax=ax).set_title('Rozmieszczenie przeszkód')
 
 sns.kdeplot(df['x'],df['y'], n_levels=2, ax=ax)
 
@@ -322,6 +326,7 @@ sns.regplot(x=df['x'],y=df['y'], fit_reg=False, ax=ax)
 sns.lmplot( x="x", y="y", data=df, fit_reg=False)
 
 #ten z rozkladem punktow na bokach
+
 sns.jointplot(x=df["x"], y=df["y"],n_levels=2, kind='kde')
 
 
@@ -354,11 +359,24 @@ calosc.head()
 
 figure, axes = plt.subplots()
 
-sns.regplot(x=calosc['x'], y=calosc['y'], fit_reg=False, color='k', ax=axes).set_title('Mapa prawdopodobieństwa - punktowa')
+plt.title('Mapa prawdopodobieństwa punktowa')
+
+for i in range(len(caloscX)):
+    plt.plot(caloscX[i],caloscY[i],'.',color='black')
+
+figur, axis = plt.subplots()
 
 
+b = axis.hist2d(calosc['x'], calosc['y'],bins=(rozmiarX/4,rozmiarY/4))
 
 
+#plt.pcolormesh(calosc, shading='gouraud')
 
+plt.title('Histogram 2D mapy prawdopodobieństwa')
+
+plt.colorbar(b[3], ax=axis)
+
+new, axxx = plt.subplots()
+sns.kdeplot(calosc['x'],calosc['y'],n_levels=2, shade="True").set_title('Mapa prawdopodobieństwa metodą pól potencjałów')
 
 plt.show()
