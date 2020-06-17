@@ -313,12 +313,13 @@ def Tablica16x2D():
     for x in range(0,rozmiarX):
         for y in range(0, rozmiarY):
             
-            powtorzenia = tablica2D[x][y]
+            powtorzenia = 0
             for i in (16*x,16*x+16):
                 for j in (16*y,16*y+16):
                     while tablica2D[x][y] > powtorzenia:
                         caloscX.append(i)
                         caloscY.append(j)
+                        powtorzenia += 1
                         
 
 df.head()
