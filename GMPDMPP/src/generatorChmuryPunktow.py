@@ -222,14 +222,85 @@ for x in range(0, len(wierzcholkiPrzeszkodaList)):
 #macierz 
 rozmiarX = rozmiary[1]+10
 rozmiarY = rozmiary[3]
-
-print(rozmiarX)
-print(rozmiarY)
+rozmiarX=500
+rozmiarY=500
 
 tablica2D = [[0] * rozmiarX for i in range(rozmiarY)]
 for i in range(0, len(arrPunktowX)):
     tablica2D[math.floor(arrPunktowX[i])][math.floor(arrPunktowY[i])]=255
 #print(tablica2D)
+
+
+
+
+df = pd.DataFrame()
+
+
+
+
+########### Niski potencjał
+arrNiskiX=[]
+arrNiskiY=[]
+
+def WyrysujPotencjalNiski(x_wsp,y_wsp,a,b):
+    #x_wsp = round(x_wsp)
+    #y_wsp = round(y_wsp)
+    #a = round(a)
+    #b = round(b)
+    for i in range (x_wsp,x_wsp+a):
+        for j in range(y_wsp,y_wsp+b):
+            arrNiskiX.append(i)
+            arrNiskiY.append(j)
+
+def ZnajdzMiejsceNaPotNiski(wielkosc_pola):
+    A=wielkosc_pola
+    B=wielkosc_pola
+    
+    mozliwe_potencjaly_X=[]
+    mozliwe_potencjaly_Y=[]
+    
+    powtorzenie = 0
+    
+    x_mem = 0
+    y_mem = 0
+    
+    warunek = True
+        
+    for x in range(1, rozmiarX-A):
+        for y in range(1, rozmiarY-B):
+            for i in range(x,x+A):
+                for j in range(y,y+B):
+                    if tablica2D[i][j] != 0:
+                        warunek = False
+                    
+            if warunek == False:
+                warunek = True
+            else:
+                mozliwe_potencjaly_X.append(x)
+                mozliwe_potencjaly_Y.append(y)
+    
+    x_mem = mozliwe_potencjaly_X[0]
+    Y_mem = mozliwe_potencjaly_Y[0]
+    print("niski pot srodek", ", X:",x_mem,", Y:",y_mem)
+    WyrysujPotencjalNiski(x_mem, y_mem, A, B)
+    
+    x_mem += A
+    y_mem += B
+    
+    znaleziono = False
+    
+    for i in range(0,len(mozliwe_potencjaly_X)):
+        if znaleziono == False:
+            if mozliwe_potencjaly_X[len(mozliwe_potencjaly_X) - i - 1] > x_mem and mozliwe_potencjaly_Y[len(mozliwe_potencjaly_X) - i - 1] > y_mem:
+                    x_mem = mozliwe_potencjaly_X[len(mozliwe_potencjaly_X) - i - 1]
+                    Y_mem = mozliwe_potencjaly_Y[len(mozliwe_potencjaly_X) - i - 1]
+                    print("niski pot srodek", ", X:",x_mem,", Y:",y_mem)
+                    WyrysujPotencjalNiski(x_mem, y_mem, A, B)
+      
+
+
+
+ZnajdzMiejsceNaPotNiski(10)
 
 print("Wszystkie punkty: ",len(arrPunktowX),", punkty na krawedzi: ",len(arrKrawedziX))
 
@@ -287,76 +358,6 @@ with open(filename, 'w+') as f:
         print(" ",file=f)
 
 
-
-
-df = pd.DataFrame()
-
-
-
-
-########### Niski potencjał
-arrNiskiX=[]
-arrNiskiY=[]
-
-def WyrysujPotencjalNiski(x_wsp,y_wsp,a,b):
-    #x_wsp = round(x_wsp)
-    #y_wsp = round(y_wsp)
-    #a = round(a)
-    #b = round(b)
-    for i in range (x_wsp,x_wsp+a):
-        for j in range(y_wsp,y_wsp+b):
-            arrNiskiX.append(i)
-            arrNiskiY.append(j)
-
-def ZnajdzMiejsceNaPotNiski(wielkosc_pola):
-    A=wielkosc_pola
-    B=wielkosc_pola
-    
-    mozliwe_potencjaly_X=[]
-    mozliwe_potencjaly_Y=[]
-    
-    powtorzenie = 0
-    
-    x_mem = 0
-    y_mem = 0
-    
-    warunek = True
-        
-    for x in range(1, len(tablica2D[0])-A):
-        for y in range(1, len(tablica2D[0])-B):
-            for i in range(x,x+A):
-                for j in range(y,y+B):
-                    if tablica2D[i][j] != 0:
-                        warunek = False
-                    
-            if warunek == False:
-                warunek = True
-            else:
-                mozliwe_potencjaly_X.append(x)
-                mozliwe_potencjaly_Y.append(y)
-    
-    x_mem = mozliwe_potencjaly_X[0]
-    Y_mem = mozliwe_potencjaly_Y[0]
-    print("niski pot srodek", ", X:",x_mem,", Y:",y_mem)
-    WyrysujPotencjalNiski(x_mem, y_mem, A, B)
-    
-    x_mem += A
-    y_mem += B
-    
-    znaleziono = False
-    
-    for i in range(0,len(mozliwe_potencjaly_X)):
-        if znaleziono == False:
-            if mozliwe_potencjaly_X[len(mozliwe_potencjaly_X) - i - 1] > x_mem and mozliwe_potencjaly_Y[len(mozliwe_potencjaly_X) - i - 1] > y_mem:
-                    x_mem = mozliwe_potencjaly_X[len(mozliwe_potencjaly_X) - i - 1]
-                    Y_mem = mozliwe_potencjaly_Y[len(mozliwe_potencjaly_X) - i - 1]
-                    print("niski pot srodek", ", X:",x_mem,", Y:",y_mem)
-                    WyrysujPotencjalNiski(x_mem, y_mem, A, B)
-      
-
-
-
-ZnajdzMiejsceNaPotNiski(10)
 
 #dodanie niskich potencjałów do macierzy
 for i in range(0, len(arrNiskiX)):
