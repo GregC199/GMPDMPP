@@ -281,24 +281,24 @@ losowanie = 0
 
 for i in range(rozmiarX):
     for j in range(rozmiarY):
-        losowanie = randrange(101)
+        
         if tablica2D[i][j] == -1:
             
-            if losowanie < 4:
-                caloscX.append(i)
-                caloscY.append(j)
+             losowanie = randrange(256/100*4)
+             tablica2D[i][j] = losowanie
+                
                 
         elif tablica2D[i][j] == 0:
             
-            if losowanie < 34:
-                caloscX.append(i)
-                caloscY.append(j)
+            losowanie = randrange(256/100*34)
+            tablica2D[i][j] = losowanie
+
         
         elif tablica2D[i][j] == 1:
             
-            if losowanie < 94:
-                caloscX.append(i)
-                caloscY.append(j)
+            losowanie = randrange(256/100*94)
+             tablica2D[i][j] = losowanie
+                
 
 #
 #przeszkody
